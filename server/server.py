@@ -13,11 +13,12 @@ from config import RECV_BUFSIZ, THREAD_POOL_SIZE, SOCKET_BACKLOG_SIZE
 log = logging.getLogger('httpy.server')
 
 
-def handle_request(client_sock):
-    data = client_sock.recv(RECV_BUFSIZ)
+def handle_request(client_sock, **kwargs):
+    data = client_sock[0].recv(RECV_BUFSIZ)
 
     log.debug('Request received: {}'.format(data))
 
+    # need to fix#
     request = parse_http_request(data)
     file_data = get_file(request.request_uri)
 

@@ -12,7 +12,6 @@ from config import FILE_CHUNK_SIZE
 log = logging.getLogger('httpy.helper')
 
 
-#class File(object)
 class File:
     def __init__(
         self, request_uri=None, file_name=None,

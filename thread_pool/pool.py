@@ -15,7 +15,7 @@ class ThreadPool:
         return 'Thread Pool task: {}'.format(self.task)
 
     def add_task(self, func, *args, **kwargs):
-        self.task.put((func, args, kwargs))
+        self.task.put((func, args))
 
     def wait_completion(self):
         self.task.join()

@@ -1,8 +1,8 @@
 import os
 import logging.config
 
-HOST = 'localhost'
-PORT = 8080
+HOST = '0.0.0.0'
+PORT = 8000
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_FILES_DIR = os.path.join(PROJECT_DIR, 'static')

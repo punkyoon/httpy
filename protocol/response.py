@@ -7,7 +7,6 @@ from protocol.status_code import HTTP_STATUS_CODE
 log = logging.getLogger('httpy.response')
 
 
-#class HttpResponse(object):
 class HttpResponse:
     def __init__(self, protocol, status, basic_range=None):
         assert status in HTTP_STATUS_CODE, 'Unknown status code'
@@ -77,5 +76,5 @@ def render_http_response(response):
     else:
         rtn.append('')
 
-    #print(rtn)
+    print(rtn)
     return '\n'.join(rtn)

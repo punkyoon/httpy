@@ -7,7 +7,7 @@ from protocol.exception import HttpParseException
 
 log = logging.getLogger('httpy.server')
 
-#class HttpRequest(object):
+
 class HttpRequest:
     def __init__(self, method, request_uri, protocol, header):
         self.method = method
@@ -40,8 +40,7 @@ class HttpRequest:
             if len(basic_range) > 1:
                 range_end = int(range[1])
 
-            #print(basic_range)
-
+            print(basic_range)
             return range_start, range_end
 
         return None, None
@@ -57,7 +56,7 @@ def parse_http_request(data):
     request_line = data_lines[0]
     request_cmpt = request_line.split(' ')
 
-    #print(data_lines)
+    print(data_lines)
 
     if len(request_cmpt) != 3:
         err = 'Cannot parse HTTP request line: {}'.format(request_line)
