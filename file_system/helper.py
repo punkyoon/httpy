@@ -19,6 +19,7 @@ class File:
     ):
         self.request_uri = request_uri
         self.file_name = file_name
+        self.file_size = file_size
         self.exist = exist
         self.mime_type = mime_type
 
@@ -75,12 +76,12 @@ class File:
 
 def get_file(request_uri):
     fn = STATIC_FILES_DIR + request_uri
-    f_size = None
+    fsize = None
     exist = False
     mime_type = ''
 
     try:
-        fsize = os.path.getsize(fn)
+        fsize = os.stat(fn).st_size
         exist = True
         type_result, encoding = mimetypes.guess_type(request_uri)
         if type_result:
@@ -88,4 +89,4 @@ def get_file(request_uri):
     except:
         pass
 
-    return File(request_uri, fn, fsize, exists, mime_type)
+    return File(request_uri, fn, fsize, exist, mime_type)

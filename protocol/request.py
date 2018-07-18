@@ -23,13 +23,13 @@ class HttpRequest:
         )
 
     def is_range_requested(self):
-        return 'Range' in self.headers
+        return 'Range' in self.header
 
     def get_range(self):
         range_header_value = None
 
         if self.is_range_requested():
-            range_header_value = self.headers['Range']
+            range_header_value = self.header['Range']
 
         if range_header_value:
             range_start, range_end = None, None
@@ -52,11 +52,9 @@ def parse_http_request(data):
         Log.error(err)
         raise HttpParseException(err)
 
-    data_lines = data.splitlines(False)
+    data_lines = data.decode().splitlines(False)
     request_line = data_lines[0]
     request_cmpt = request_line.split(' ')
-
-    print(data_lines)
 
     if len(request_cmpt) != 3:
         err = 'Cannot parse HTTP request line: {}'.format(request_line)

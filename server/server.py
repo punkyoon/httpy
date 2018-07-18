@@ -33,6 +33,7 @@ def handle_request(client_sock, **kwargs):
 
     elif file_data.exist:
         response = HttpResponse(protocol=request.protocol, status=200)
+        response.file_data = file_data 
 
     else:
         response = HttpResponse(protocol=request.protocol, status=404)
@@ -42,12 +43,12 @@ def handle_request(client_sock, **kwargs):
     log.info('GET {uri} {protoc} {basic_range} {status}'.format(
         uri=request.request_uri,
         protoc=request.protocol,
-        basic_range=request.basic_range,
-        status=request.status
+        basic_range=response.basic_range,
+        status=response.status
     ))
 
-    response.write_to(client_sock)
-    client_sock.close()
+    response.write_to(client_sock[0])
+    client_sock[0].close()
 
 
 def run_server(host, port):
@@ -64,9 +65,6 @@ def run_server(host, port):
 
     while True:
         log.debug('Waiting for connection..')
-
         client_sock, addr = server_sock.accept()
-
         log.debug('Connected from: {}'.format(addr))
-
         pool.add_task(handle_request, client_sock)

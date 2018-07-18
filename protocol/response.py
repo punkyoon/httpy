@@ -13,7 +13,7 @@ class HttpResponse:
 
         self.protocol = protocol
         self.status = status
-        self.headers = {}
+        self.header = dict()
         self.basic_range = basic_range
         self.content = ''
         self.file_data = None
@@ -30,9 +30,9 @@ class HttpResponse:
             self.header['Content-Length'] = self.file_data.file_size
             self.header['Accept-Ranges'] = 'bytes'
 
-            if self.range:
+            if self.basic_range:
                 range_start, range_end = self.file_data.calculate_range(
-                    self.range
+                    self.basic_range
                 )
 
                 self.header['Content-Range'] = 'bytes {}-{}/{}'.format(
@@ -44,13 +44,13 @@ class HttpResponse:
                 self.header['Content-Length'] = range_end - range_start + 1
 
         response_msg = render_http_response(self)
-        output.sendall(response_msg)
+        output.sendall(response_msg.encode('utf-8'))
 
-        Log.debug('Response: {}\n'.format(response_msg))
+        log.debug('Response: {}\n'.format(response_msg))
 
         if self.file_data:
             self.file_data.stream_to(
-                output, range=self.file_data.calculate_range(self.range)
+                output, basic_range=self.file_data.calculate_range(self.basic_range)
             )
 
 
@@ -60,12 +60,12 @@ def render_http_response(response):
     response_line = '{} {} {}'.format(
         response.protocol,
         response.status,
-        HTTP_STATUS_CODE[response.statue][0]
+        HTTP_STATUS_CODE[response.status][0]
     )
 
     rtn.append(response_line)
 
-    for key, value in response.headers.iteritems():
+    for key, value in response.header.items():
         header_line = '{}: {}'.format(key, value)
         rtn.append(header_line)
 
@@ -76,5 +76,4 @@ def render_http_response(response):
     else:
         rtn.append('')
 
-    print(rtn)
     return '\n'.join(rtn)
